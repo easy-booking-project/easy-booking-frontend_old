@@ -43,7 +43,7 @@ module.exports = {
     'spaced-comment': 'off',
     'eol-last': 'off',
     quotes: [0, 'single'],
-    semi: [2, 'never'],
+    semi: [2, 'always'],
     indent: 'off',
     'import/extensions': [
       'error',
@@ -57,4 +57,4 @@ module.exports = {
       },
     ],
   },
-}
+};
