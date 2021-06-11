@@ -30,16 +30,6 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint'],
   rules: {
-    'sort-imports': [
-      'error',
-      {
-        ignoreCase: false,
-        ignoreDeclarationSort: false,
-        ignoreMemberSort: false,
-        memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
-        allowSeparatedGroups: true,
-      },
-    ],
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'arrow-body-style': 0,
     'no-var': 'error',
@@ -53,7 +43,7 @@ module.exports = {
     'spaced-comment': 'off',
     'eol-last': 'off',
     quotes: [0, 'single'],
-    semi: [2, 'always'],
+    semi: [2, 'never'],
     indent: 'off',
     'import/extensions': [
       'error',
