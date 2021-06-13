@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Box, Flex, useColorModeValue } from '@chakra-ui/react';
+import { Box, Center, Flex, useColorModeValue } from '@chakra-ui/react';
 import { HashRouter } from 'react-router-dom';
 import Header from './components/common/Header';
-import Footer from './components/common/Footer';
+// import Footer from './components/common/footer';
 import Router from './components/common/Router';
 
 const App = () => {
@@ -15,7 +15,8 @@ const App = () => {
           <Box flex="1" p="8">
             <Router />
           </Box>
-          <Footer />
+          {/* <Footer /> */}
+          <Center p="0.5rem">Made with ❤️ in Saskatoon</Center>
         </Flex>
       </Box>
     </HashRouter>
