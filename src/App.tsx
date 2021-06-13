@@ -1,25 +1,26 @@
 import * as React from 'react';
+import { Box, Center, Flex, useColorModeValue } from '@chakra-ui/react';
+import { HashRouter } from 'react-router-dom';
+import Header from './components/common/Header';
+// import Footer from './components/common/footer';
+import Router from './components/common/Router';
 
-import { Box, ChakraProvider, Code, Grid, Link, Text, VStack, theme } from '@chakra-ui/react';
-
-import ColorModeSwitcher from './components/common/ColorModeSwitcher';
-
-const App = () => (
-  <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link color="teal.500" href="https://chakra-ui.com" fontSize="2xl" target="_blank" rel="noopener noreferrer">
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
-    </Box>
-  </ChakraProvider>
-);
+const App = () => {
+  const bg = useColorModeValue('linear(to-r, #74ebd5, #ACB6E5)', 'linear(to-r, #232526, #414345)');
+  return (
+    <HashRouter>
+      <Box textAlign="center" fontSize="xl" bgGradient={bg}>
+        <Flex minH="100vh" p={3} flexDir="column">
+          <Header />
+          <Box flex="1" p="8">
+            <Router />
+          </Box>
+          {/* <Footer /> */}
+          <Center p="0.5rem">Made with ❤️ in Saskatoon</Center>
+        </Flex>
+      </Box>
+    </HashRouter>
+  );
+};
 
 export default App;
