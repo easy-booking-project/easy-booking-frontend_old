@@ -9,8 +9,8 @@ const App = () => {
   const bg = useColorModeValue('linear(to-r, #74ebd5, #ACB6E5)', 'linear(to-r, #232526, #414345)');
   return (
     <HashRouter>
-      <Box textAlign="center" fontSize="xl" bgGradient={bg}>
-        <Flex minH="100vh" p={3} flexDir="column">
+      <Box textAlign="center"   fontSize="xl" bgGradient={bg}>
+        <Flex flexDir="column"  minH="100vh" minW="100vw">
           <Header />
           <Box flex="1" p="8">
             <Router />

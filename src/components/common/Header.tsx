@@ -1,4 +1,14 @@
-import { Box, Flex, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, useColorModeValue } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Heading,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import React from 'react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { AiOutlineLogin, AiOutlineDeliveredProcedure } from 'react-icons/ai';
@@ -12,21 +22,20 @@ const Header = () => {
   // get url pathname
   const location = useLocation();
 
-  // nav header 
-  const header1 = useColorModeValue("#000", "#fff");
-  const header2 = useColorModeValue("#4A5568", "#F7FAFC");
+  // nav header
+  const header1 = useColorModeValue('#000', '#fff');
+  const header2 = useColorModeValue('#4A5568', '#F7FAFC');
 
+  const hover = useColorModeValue('#000', '#fff');
 
-  const hover = useColorModeValue("#000","#fff");
-
-  const borderBottom = useColorModeValue("4px solid #333","4px solid #F7FAFC");
+  const borderBottom = useColorModeValue('4px solid #333', '4px solid #F7FAFC');
 
   return (
     <Flex
       h="16"
       justifyContent="space-between"
       alignItems="center"
-      w={{ base: '85vw', md: '46rem', lg: '71rem', xl: '71rem' }}
+      w={{ base: '95vw', md: '46rem', lg: '71rem', xl: '71rem' }}
       margin="0 auto"
     >
       <Heading
@@ -35,6 +44,7 @@ const Header = () => {
         onClick={() => {
           history.push('/home');
         }}
+       
       >
         📅 Easy Booking
       </Heading>
@@ -90,7 +100,7 @@ const Header = () => {
       </Flex>
 
       {/* mobile */}
-      <Flex display={{ base: 'flex', sm: 'flex', md: 'none' }}>
+      <Flex display={{ base: 'flex', sm: 'flex', md: 'none' }} flexDir="inherit">
         <Menu>
           <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="outline" />
           <MenuList>
@@ -114,6 +124,7 @@ const Header = () => {
             </MenuItem>
           </MenuList>
         </Menu>
+
         <ColorModeSwitcher />
       </Flex>
     </Flex>

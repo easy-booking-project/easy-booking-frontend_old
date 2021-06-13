@@ -30,8 +30,6 @@ const SignIn = () => {
   const handleSubmit = async () => {
     setIsLoading(true);
 
-    console.log(email, password);
-
     // try {
     //   // make  login function  eg:  await userLogin({ email, password });
     //   setIsLoading(false);
@@ -44,10 +42,10 @@ const SignIn = () => {
   };
 
   return (
-    <Flex width="full" align="center" justifyContent="center" mt="8rem">
+    <Flex width="full" align="center" justifyContent="center" mt={{ base: '3rem', md: '4rem', lg: '8rem', xl: '8rem' }}>
       <Box p={8} maxWidth="500px" borderWidth={1} borderRadius={8} boxShadow="lg">
         <Box textAlign="center">
-          <Heading>Login</Heading>
+          <Heading>Sign In</Heading>
         </Box>
         <Box my={4} textAlign="left">
           {/* show the error message  */}
@@ -57,12 +55,12 @@ const SignIn = () => {
               <FormLabel>Email</FormLabel>
               <Input
                 type="email"
-                placeholder="test@test.com"
+                placeholder="youemail@gmail.com"
                 onChange={(event) => setEmail(event.currentTarget.value)}
                 size="lg"
               />
             </FormControl>
-            <FormControl mt={6}>
+            <FormControl mt={6} isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
                 <Input
@@ -78,7 +76,7 @@ const SignIn = () => {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
-            <Button type="submit" variantColor="teal" variant="outline" width="full" mt={4}>
+            <Button type="submit"  variant="outline" width="full" mt={6}>
               {isLoading ? <CircularProgress isIndeterminate size="24px" color="teal" /> : 'Sign In'}
             </Button>
           </Box>
