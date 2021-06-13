@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
+import { Box, Flex, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { AiOutlineLogin, AiOutlineDeliveredProcedure } from 'react-icons/ai';
@@ -11,6 +11,15 @@ const Header = () => {
 
   // get url pathname
   const location = useLocation();
+
+  // nav header 
+  const header1 = useColorModeValue("#000", "#fff");
+  const header2 = useColorModeValue("#4A5568", "#F7FAFC");
+
+
+  const hover = useColorModeValue("#000","#fff");
+
+  const borderBottom = useColorModeValue("4px solid #333","4px solid #F7FAFC");
 
   return (
     <Flex
@@ -36,18 +45,19 @@ const Header = () => {
           mr={{ md: '9', lg: '28' }}
           fontWeight="500"
           cursor="pointer"
-          borderBottom={location.pathname === '/' ? '4px solid #333' : ''}
+          borderBottom={location.pathname === '/' ? borderBottom : ''}
           h="16"
           alignItems="center"
           onClick={() => {
             history.push('/');
           }}
-          color={location.pathname === '/' ? '#000' : '#999'}
+          _hover={{ color: hover }}
+          color={location.pathname === '/' ? header1 : header2}
         >
           Home
         </Flex>
         <Flex
-          _hover={{ color: '#000' }}
+          _hover={{ color: hover }}
           mr={{ md: '9', lg: '28' }}
           h="16"
           fontWeight="500"
@@ -56,13 +66,13 @@ const Header = () => {
           onClick={() => {
             history.push('/signin');
           }}
-          color={location.pathname === '/signin' ? '#000' : '#999'}
-          borderBottom={location.pathname === '/signin' ? '4px solid #333' : ''}
+          color={location.pathname === '/signin' ? header1 : header2}
+          borderBottom={location.pathname === '/signin' ? borderBottom : ''}
         >
           Sign In
         </Flex>
         <Flex
-          _hover={{ color: '#000' }}
+          _hover={{ color: hover }}
           mr={{ md: '9', lg: '28' }}
           fontWeight="500"
           h="16"
@@ -71,8 +81,8 @@ const Header = () => {
           onClick={() => {
             history.push('/signup');
           }}
-          color={location.pathname === '/signup' ? '#000' : '#999'}
-          borderBottom={location.pathname === '/signup' ? '4px solid #333' : ''}
+          color={location.pathname === '/signup' ? header1 : header2}
+          borderBottom={location.pathname === '/signup' ? borderBottom : ''}
         >
           Sign Up
         </Flex>
