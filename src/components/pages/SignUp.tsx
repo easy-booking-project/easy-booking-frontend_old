@@ -12,15 +12,16 @@ import {
   InputRightElement,
   InputGroup,
 } from '@chakra-ui/react';
+import { ISignUp, signUp } from '../../Api';
 
 const SignIn = () => {
   // *username,   *password,    nickname,    *firstname, middlename,  *lastname
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(''); // TODO username or email?
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
-  const [firstname, setFirstname] = useState('');
-  const [middlename, setMiddlename] = useState('');
-  const [lastname, setLastname] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [middleName, setMiddleName] = useState('');
+  const [lastName, setLastName] = useState('');
 
   // submit button loading
   const [isLoading, setIsLoading] = useState(false);
@@ -32,13 +33,43 @@ const SignIn = () => {
 
   const handlePasswordVisibility = () => setShowPassword(!showPassword);
 
-  const handleSubmit = async () => {
-    setIsLoading(true);
+  const actionSignUp = async () => {
+    try {
+      const response = await signUp({
+        username: email,
+        authenticationHash: password,
+        nickname,
+        firstName,
+        middleName,
+        lastName,
+      } as ISignUp);
 
-    
+      const json = await response.json();
+
+      if (response.ok) {
+        // window.location.reload();
+      } else {
+        if (json.status === 406) {
+          setError(json.message);
+          // eslint-disable-next-line no-alert
+          alert(json.message); // TODO use better way to display error message
+        }
+
+        setIsLoading(false);
+      }
+    } catch (e) {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSubmit = () => {
+    // e.preventDefault();
+
+    setIsLoading(true);
+    actionSignUp();
 
     // try {
-    //   // make  login function  eg:  await userLogin({ email, password });
+    // make  login function  eg:  await userLogin({ email, password });
     //   setIsLoading(false);
     // } catch (mes) {
     //   setError('Invalid username or password');
@@ -57,14 +88,14 @@ const SignIn = () => {
 
       // mt="8rem"
     >
-      <Box p={8}  maxWidth="500px" borderWidth={1} borderRadius={8} boxShadow="lg">
+      <Box p={8} maxWidth="500px" borderWidth={1} borderRadius={8} boxShadow="lg">
         <Box textAlign="center">
           <Heading>Sign Up</Heading>
         </Box>
         <Box my={4} textAlign="left">
           {/* show the error message  */}
 
-          <Box as="form" onSubmit={handleSubmit}>
+          <Box as="form">
             {/* Email  */}
             <FormControl isRequired>
               <FormLabel>Email</FormLabel>
@@ -103,12 +134,12 @@ const SignIn = () => {
               />
             </FormControl>
             {/* firstname  */}
-            <FormControl mt={6} >
+            <FormControl mt={6}>
               <FormLabel>First Name</FormLabel>
               <Input
                 type="text"
                 placeholder="Song"
-                onChange={(event) => setFirstname(event.currentTarget.value)}
+                onChange={(event) => setFirstName(event.currentTarget.value)}
                 size="lg"
               />
             </FormControl>
@@ -118,21 +149,21 @@ const SignIn = () => {
               <Input
                 type="text"
                 placeholder="Shi"
-                onChange={(event) => setMiddlename(event.currentTarget.value)}
+                onChange={(event) => setMiddleName(event.currentTarget.value)}
                 size="lg"
               />
             </FormControl>
             {/* last name  */}
-            <FormControl mt={6} >
+            <FormControl mt={6}>
               <FormLabel>Last Name</FormLabel>
               <Input
                 type="text"
                 placeholder="Wei"
-                onChange={(event) => setLastname(event.currentTarget.value)}
+                onChange={(event) => setLastName(event.currentTarget.value)}
                 size="lg"
               />
             </FormControl>
-            <Button type="submit"  variant="outline" width="full" mt={6}>
+            <Button type="button" variant="outline" width="full" mt={6} onClick={handleSubmit}>
               {isLoading ? <CircularProgress isIndeterminate size="24px" color="teal" /> : 'Sign Up'}
             </Button>
           </Box>

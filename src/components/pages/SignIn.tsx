@@ -12,6 +12,7 @@ import {
   InputRightElement,
   InputGroup,
 } from '@chakra-ui/react';
+import { signIn } from '../../Api';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -27,8 +28,31 @@ const SignIn = () => {
 
   const handlePasswordVisibility = () => setShowPassword(!showPassword);
 
+  const actionSignIn = async () => {
+    try {
+      const response = await signIn(email, password);
+
+      const json = await response.json();
+
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        if (json.status === 406) {
+          setError(json.message);
+          // eslint-disable-next-line no-alert
+          alert(json.message); // TODO use better way to display error message
+        }
+
+        setIsLoading(false);
+      }
+    } catch (e) {
+      setIsLoading(false);
+    }
+  };
+
   const handleSubmit = async () => {
     setIsLoading(true);
+    actionSignIn();
 
     // try {
     //   // make  login function  eg:  await userLogin({ email, password });
@@ -50,7 +74,7 @@ const SignIn = () => {
         <Box my={4} textAlign="left">
           {/* show the error message  */}
 
-          <Box as="form" onSubmit={handleSubmit}>
+          <Box as="form">
             <FormControl isRequired>
               <FormLabel>Email</FormLabel>
               <Input
@@ -76,7 +100,7 @@ const SignIn = () => {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
-            <Button type="submit"  variant="outline" width="full" mt={6}>
+            <Button type="button" variant="outline" width="full" mt={6} onClick={handleSubmit}>
               {isLoading ? <CircularProgress isIndeterminate size="24px" color="teal" /> : 'Sign In'}
             </Button>
           </Box>

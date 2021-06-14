@@ -10,6 +10,7 @@ export async function signIn(username: string, authenticationHash: string): Prom
         username,
         authenticationHash,
       }),
+      credentials: 'same-origin',
     },
   );
 }
@@ -32,6 +33,7 @@ export async function signUp(payload: ISignUp): Promise<Response> {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
+      credentials: 'same-origin',
     },
   );
 }
@@ -47,6 +49,7 @@ export async function signOut(token: string): Promise<Response> {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
+      credentials: 'same-origin',
     },
   );
 }
