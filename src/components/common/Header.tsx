@@ -44,7 +44,6 @@ const Header = () => {
         onClick={() => {
           history.push('/home');
         }}
-       
       >
         📅 Easy Booking
       </Heading>
@@ -101,6 +100,7 @@ const Header = () => {
 
       {/* mobile */}
       <Flex display={{ base: 'flex', sm: 'flex', md: 'none' }} flexDir="inherit">
+
         <Menu>
           <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="outline" />
           <MenuList>
@@ -124,7 +124,6 @@ const Header = () => {
             </MenuItem>
           </MenuList>
         </Menu>
-
         <ColorModeSwitcher />
       </Flex>
     </Flex>
