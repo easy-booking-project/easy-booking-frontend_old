@@ -91,6 +91,7 @@ const SignIn = () => {
               </InputGroup>
             </FormControl>
             <Button type="button" variant="outline" width="full" mt={6} onClick={handleSubmit}>
+
               {isLoading ? <CircularProgress isIndeterminate size="24px" color="teal" /> : 'Sign In'}
             </Button>
           </Box>

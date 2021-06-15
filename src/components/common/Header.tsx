@@ -44,7 +44,6 @@ const Header = () => {
         onClick={() => {
           history.push('/home');
         }}
-       
       >
         📅 Easy Booking
       </Heading>
@@ -124,7 +123,6 @@ const Header = () => {
             </MenuItem>
           </MenuList>
         </Menu>
-
         <ColorModeSwitcher />
       </Flex>
     </Flex>
