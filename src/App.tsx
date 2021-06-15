@@ -10,7 +10,7 @@ const App = () => {
   return (
     <HashRouter>
       <Box textAlign="center" fontSize="xl" bgGradient={bg}>
-        <Flex minH="100vh" p={3} flexDir="column">
+        <Flex flexDir="column"  minH="100vh" minW="100vw">
           <Header />
           <Box flex="1" p="8">
             <Router />
