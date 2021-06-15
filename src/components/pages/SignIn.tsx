@@ -53,16 +53,6 @@ const SignIn = () => {
   const handleSubmit = async () => {
     setIsLoading(true);
     actionSignIn();
-
-    // try {
-    //   // make  login function  eg:  await userLogin({ email, password });
-    //   setIsLoading(false);
-    // } catch (mes) {
-    //   setError('Invalid username or password');
-    //   setIsLoading(false);
-    //   setEmail('');
-    //   setPassword('');
-    // }
   };
 
   return (
@@ -72,7 +62,7 @@ const SignIn = () => {
           <Heading>Sign In</Heading>
         </Box>
         <Box my={4} textAlign="left">
-          {/* show the error message  */}
+          {/* TODO show the error message  */}
 
           <Box as="form">
             <FormControl isRequired>

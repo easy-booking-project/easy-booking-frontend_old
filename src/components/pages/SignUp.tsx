@@ -15,7 +15,6 @@ import {
 import { ISignUp, signUp } from '../../Api';
 
 const SignIn = () => {
-  // *username,   *password,    nickname,    *firstname, middlename,  *lastname
   const [email, setEmail] = useState(''); // TODO username or email?
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
@@ -63,20 +62,8 @@ const SignIn = () => {
   };
 
   const handleSubmit = () => {
-    // e.preventDefault();
-
     setIsLoading(true);
     actionSignUp();
-
-    // try {
-    // make  login function  eg:  await userLogin({ email, password });
-    //   setIsLoading(false);
-    // } catch (mes) {
-    //   setError('Invalid username or password');
-    //   setIsLoading(false);
-    //   setEmail('');
-    //   setPassword('');
-    // }
   };
 
   return (
@@ -85,15 +72,13 @@ const SignIn = () => {
       align="center"
       justifyContent="center"
       mt={{ base: '2rem', md: '3rem', lg: '3.5rem', xl: '5rem' }}
-
-      // mt="8rem"
     >
       <Box p={8} maxWidth="500px" borderWidth={1} borderRadius={8} boxShadow="lg">
         <Box textAlign="center">
           <Heading>Sign Up</Heading>
         </Box>
         <Box my={4} textAlign="left">
-          {/* show the error message  */}
+          {/* TODO show the error message  */}
 
           <Box as="form">
             {/* Email  */}
