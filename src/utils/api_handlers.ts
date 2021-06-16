@@ -33,6 +33,16 @@ export async function signUp(payload: Partial<UserSignUpInfo>) {
   );
 }
 
+export async function fetchUser() {
+  return fetch(
+    `${ServerInfo.BASE_URL}/user/fetch`,
+    {
+      method: 'GET',
+      credentials: 'include',
+    },
+  );
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function callApiAndReturnIfSucceed(apiCall: (...p: any) => Promise<Response>, ...params: any[]) {
   try {
