@@ -1,6 +1,6 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Button } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { fetchUser } from '../../utils/api_handlers';
+import { fetchUser, signOut } from '../../utils/api_handlers';
 import { User } from '../../utils/User';
 
 const Home: React.FC = () => {
@@ -13,6 +13,8 @@ const Home: React.FC = () => {
   return (
     <Box>
       Hello, {user?.nickname}!
+      <br />
+      <Button onClick={handleSignOut}>Sign Out</Button>
     </Box>
   );
 };
@@ -32,4 +34,10 @@ async function fetchAndSetUser(setUser: (user: User) => void) {
     // TODO consider using useHistory hook
     window.location.hash = '/signin';
   }
+}
+
+async function handleSignOut() {
+  await signOut();
+  // TODO consider using useHistory hook
+  window.location.hash = '/signin';
 }

@@ -43,6 +43,16 @@ export async function fetchUser() {
   );
 }
 
+export async function signOut() {
+  return fetch(
+    `${ServerInfo.BASE_URL}/authentication/sign-out`,
+    {
+      method: 'POST',
+      credentials: 'include',
+    },
+  );
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function callApiAndReturnIfSucceed(apiCall: (...p: any) => Promise<Response>, ...params: any[]) {
   try {
