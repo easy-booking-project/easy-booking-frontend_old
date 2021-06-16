@@ -1,7 +1,24 @@
 /* eslint-disable import/prefer-default-export */
 
 import ServerInfo from "./ServerInfo";
-import { UserSignUpInfo } from "./User";
+import { UserSignInInfo, UserSignUpInfo } from "./User";
+
+export async function signIn({ username, authenticationHash }: UserSignInInfo) {
+  return fetch(
+    `${ServerInfo.BASE_URL}/authentication/sign-in`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        authenticationHash,
+      }),
+      credentials: 'include',
+    },
+  );
+}
 
 export async function signUp(payload: Partial<UserSignUpInfo>) {
   return fetch(

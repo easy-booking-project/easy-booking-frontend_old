@@ -1,97 +1,46 @@
-import React, { useState } from 'react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import {
-  Flex,
-  Box,
-  Heading,
-  FormControl,
-  FormLabel,
-  Input,
-  Button,
-  CircularProgress,
-  InputRightElement,
-  InputGroup,
-} from '@chakra-ui/react';
-import { signIn } from '../../Api';
+import { Flex, Box, Heading, FormControl, FormLabel, Input, Button, CircularProgress } from "@chakra-ui/react";
+import React, { FormEvent, useState } from "react";
+import { callApiAndReturnIfSucceed, signIn } from "../../utils/api_handlers";
+import digestText from "../../utils/digest";
+import { UserSignInInfo } from "../../utils/User";
 
-const SignIn = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const inputDefinitions = [
+  { name: 'username', label: 'Username', type: 'text', placeholder: 'yourname@example.com', size: 'lg', required: true },
+  { name: 'password', label: 'Password', type: 'password', placeholder: '********', size: 'lg', required: true },
+];
 
-  // submit button loading
+const SignIn: React.FC = () => {
+  const [user] = useState<Partial<UserSignInInfo>>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  // if error show the error compinent
-  const [error, setError] = useState('');
-
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handlePasswordVisibility = () => setShowPassword(!showPassword);
-
-  const actionSignIn = async () => {
-    try {
-      const response = await signIn(email, password);
-
-      const json = await response.json();
-
-      if (response.ok) {
-        window.location.reload();
-      } else {
-        if (json.status === 406) {
-          setError(json.message);
-          // eslint-disable-next-line no-alert
-          alert(json.message); // TODO use better way to display error message
-        }
-
-        setIsLoading(false);
-      }
-    } catch (e) {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    actionSignIn();
-  };
-
   return (
-    <Flex width="full" align="center" justifyContent="center" mt={{ base: '3rem', md: '4rem', lg: '8rem', xl: '8rem' }}>
+    <Flex
+      width="full"
+      align="center"
+      justifyContent="center"
+      mt={{ base: '2rem', md: '3rem', lg: '3.5rem', xl: '5rem' }}
+    >
       <Box p={8} maxWidth="500px" borderWidth={1} borderRadius={8} boxShadow="lg">
         <Box textAlign="center">
           <Heading>Sign In</Heading>
         </Box>
         <Box my={4} textAlign="left">
           {/* TODO show the error message  */}
-
-          <Box as="form">
-            <FormControl isRequired>
-              <FormLabel>Email</FormLabel>
-              <Input
-                type="email"
-                placeholder="youemail@gmail.com"
-                onChange={(event) => setEmail(event.currentTarget.value)}
-                size="lg"
-              />
-            </FormControl>
-            <FormControl mt={6} isRequired>
-              <FormLabel>Password</FormLabel>
-              <InputGroup>
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="*******"
-                  size="lg"
-                  onChange={(event) => setPassword(event.currentTarget.value)}
-                />
-                <InputRightElement width="3rem">
-                  <Button mt="0.5rem" boxSize={8} onClick={handlePasswordVisibility}>
-                    {showPassword ? <ViewOffIcon /> : <ViewIcon />}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
-            <Button type="button" variant="outline" width="full" mt={6} onClick={handleSubmit}>
-
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any*/}
+          <Box as="form" onSubmit={(event: any) => handleSubmit({ event, user, setIsLoading })}>
+            {
+              inputDefinitions.map(inputDefinition => (
+                <FormControl key={inputDefinition.name} isRequired={inputDefinition.required}>
+                  <FormLabel>{inputDefinition.label}</FormLabel>
+                  <Input
+                    onChange={event => handleInputChange({ inputName: inputDefinition.name, value: event.currentTarget.value, user })}
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...inputDefinition}
+                  />
+                </FormControl>
+              ))
+            }
+            <Button type="submit" variant="outline" width="full" mt={6}>
               {isLoading ? <CircularProgress isIndeterminate size="24px" color="teal" /> : 'Sign In'}
             </Button>
           </Box>
@@ -102,3 +51,36 @@ const SignIn = () => {
 };
 
 export default SignIn;
+
+async function handleInputChange({ inputName, value, user }: {
+  inputName: string,
+  value: string,
+  user: Partial<UserSignInInfo>,
+}) {
+  if (inputName === 'password') {
+    // eslint-disable-next-line no-param-reassign
+    user.authenticationHash = await digestText(value);
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, no-param-reassign
+    (user as any)[inputName] = value;
+  }
+}
+
+async function handleSubmit({ event, user, setIsLoading }: {
+  event: FormEvent,
+  user: Partial<UserSignInInfo>,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+}) {
+  event.preventDefault();
+  setIsLoading(true);
+  const isSuccessful = await callApiAndReturnIfSucceed(signIn, user);
+  setIsLoading(false);
+  if (isSuccessful) {
+    // TODO consider using useHistory hook
+    window.location.hash = '/';
+  } else {
+    // TODO use UI framework's alert component
+    // eslint-disable-next-line no-alert
+    alert('Sign in fail');
+  }
+}
