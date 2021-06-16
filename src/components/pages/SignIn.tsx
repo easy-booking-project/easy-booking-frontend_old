@@ -1,6 +1,6 @@
 import { Flex, Box, Heading, FormControl, FormLabel, Input, Button, CircularProgress } from "@chakra-ui/react";
-import React, { FormEvent, useState } from "react";
-import { callApiAndReturnIfSucceed, signIn } from "../../utils/api_handlers";
+import React, { FormEvent, useEffect, useState } from "react";
+import { callApiAndReturnIfSucceed, fetchUser, signIn } from "../../utils/api_handlers";
 import digestText from "../../utils/digest";
 import { UserSignInInfo } from "../../utils/User";
 
@@ -12,6 +12,10 @@ const inputDefinitions = [
 const SignIn: React.FC = () => {
   const [user] = useState<Partial<UserSignInInfo>>({});
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    redirectToHomeIfUserAlreadySignedIn();
+  }, []);
 
   return (
     <Flex
@@ -82,5 +86,13 @@ async function handleSubmit({ event, user, setIsLoading }: {
     // TODO use UI framework's alert component
     // eslint-disable-next-line no-alert
     alert('Sign in fail');
+  }
+}
+
+async function redirectToHomeIfUserAlreadySignedIn() {
+  const hasUserAlreadySignedIn = await callApiAndReturnIfSucceed(fetchUser);
+  if (hasUserAlreadySignedIn) {
+    // TODO consider using useHistory hook
+    window.location.hash = '/';
   }
 }
