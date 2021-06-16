@@ -100,7 +100,6 @@ const Header = () => {
 
       {/* mobile */}
       <Flex display={{ base: 'flex', sm: 'flex', md: 'none' }} flexDir="inherit">
-
         <Menu>
           <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="outline" />
           <MenuList>
