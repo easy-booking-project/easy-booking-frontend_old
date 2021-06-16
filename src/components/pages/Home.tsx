@@ -1,18 +1,20 @@
-import { Box, Button } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { fetchUser, signOut } from '../../utils/api_handlers';
+import { Box, Button, CircularProgress } from '@chakra-ui/react';
+import React from 'react';
+import { signOut } from '../../utils/api_handlers';
 import { User } from '../../utils/User';
 
-const Home: React.FC = () => {
-  const [user, setUser] = useState<User>();
+// eslint-disable-next-line no-shadow
+const Home = ({ User }: { User: User }) => {
+  if (!User) {
+    window.location.hash = '/';
+    return <CircularProgress isIndeterminate />;
+  }
 
-  useEffect(() => {
-    fetchAndSetUser(setUser);
-  }, []);
+  const { nickname } = User;
 
   return (
     <Box>
-      Hello, {user?.nickname}!
+      Hello, {nickname}!
       <br />
       <Button onClick={handleSignOut}>Sign Out</Button>
     </Box>
@@ -21,23 +23,8 @@ const Home: React.FC = () => {
 
 export default Home;
 
-async function fetchAndSetUser(setUser: (user: User) => void) {
-  try {
-    const response = await fetchUser();
-    if (response.ok) {
-      setUser(await response.json());
-    } else {
-      // TODO consider using useHistory hook
-      window.location.hash = '/signin';
-    }
-  } catch {
-    // TODO consider using useHistory hook
-    window.location.hash = '/signin';
-  }
-}
-
 async function handleSignOut() {
   await signOut();
   // TODO consider using useHistory hook
-  window.location.hash = '/signin';
+  window.location.reload();
 }
