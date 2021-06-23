@@ -2,19 +2,23 @@ import { Box, Button } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { fetchUser, signOut } from '../../utils/api_handlers';
 import { User } from '../../utils/User';
+import Calendar from '../common/calendar/calendar';
+
 
 const Home: React.FC = () => {
   const [user, setUser] = useState<User>();
 
-  useEffect(() => {
-    fetchAndSetUser(setUser);
-  }, []);
+  // useEffect(() => {
+  //   fetchAndSetUser(setUser);
+  // }, []);
 
   return (
     <Box>
       Hello, {user?.nickname}!
       <br />
       <Button onClick={handleSignOut}>Sign Out</Button>
+
+      <Calendar/>
     </Box>
   );
 };
