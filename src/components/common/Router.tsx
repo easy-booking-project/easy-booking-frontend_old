@@ -1,25 +1,36 @@
 import { CircularProgress } from '@chakra-ui/react';
 import React, { Suspense, useEffect, useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { fetchUser } from '../../utils/api_handlers';
-import { User } from '../../utils/User';
+import Auth from '../../utils/store';
 
 const HomeLazy = React.lazy(() => import('../pages/Home') as never);
 const SignInLazy = React.lazy(() => import('../pages/SignIn') as never);
 const SignUpLazy = React.lazy(() => import('../pages/SignUp') as never);
 
 const BasicRoute = () => {
-  const [user, setUser] = useState<User | undefined>(undefined);
-  const [loading, setLoading] = useState<boolean>(true);
+  const useAuth = Auth.useContainer();
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {
+    async function validate() {
+      const result = await useAuth.validate();
+      console.log('me', useAuth.auth.authenticated, result);
+      setLoggedIn(result);
+      setLoading(false);
+    }
+
     setLoading(true);
-    userLoggedIn(setUser, setLoading);
+    validate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
     return <CircularProgress isIndeterminate />;
   }
+
+  console.log('--router ---', loggedIn);
 
   return (
     <Suspense fallback={<CircularProgress isIndeterminate />}>
@@ -28,20 +39,20 @@ const BasicRoute = () => {
           exact
           path="/"
           component={() => {
-            return <HomeLazy User={user} />;
+            return <HomeLazy />;
           }}
         >
-          {user ? <Redirect to="/Home" /> : <Redirect to="/signin" />}
+          {loggedIn ? <Redirect to="/Home" /> : <Redirect to="/signin" />}
         </Route>
         <Route
           exact
           path="/Home"
           component={() => {
-            return <HomeLazy User={user} />;
+            return <HomeLazy />;
           }}
         />
         <Route exact path="/signin">
-          {user ? <Redirect to="/Home" /> : <SignInLazy />}
+          {loggedIn ? <Redirect to="/Home" /> : <SignInLazy />}
         </Route>
         <Route exact path="/signup" component={SignUpLazy} />
       </Switch>
@@ -50,16 +61,3 @@ const BasicRoute = () => {
 };
 
 export default BasicRoute;
-
-async function userLoggedIn(setUser: (user: User | undefined) => void, setLoading: (loading: boolean) => void) {
-  try {
-    const response = await fetchUser();
-    if (response.ok) {
-      setUser(await response.json());
-    }
-  } catch (e) {
-    setUser(undefined);
-  }
-
-  setLoading(false);
-}
