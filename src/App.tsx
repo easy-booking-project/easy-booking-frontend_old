@@ -10,8 +10,8 @@ const App = () => {
   const bg = useColorModeValue('linear(to-r, #74ebd5, #ACB6E5)', 'linear(to-r, #232526, #414345)');
 
   return (
-    <HashRouter>
-      <Auth.Provider>
+    <Auth.Provider>
+      <HashRouter>
         <Box textAlign="center" fontSize="xl" bgGradient={bg}>
           <Flex flexDir="column" minH="100vh" minW="100vw">
             <Header />
@@ -22,8 +22,8 @@ const App = () => {
             <Center p="0.5rem">Made with ❤️ in Saskatoon</Center>
           </Flex>
         </Box>
-      </Auth.Provider>
-    </HashRouter>
+      </HashRouter>
+    </Auth.Provider>
   );
 };
 

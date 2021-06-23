@@ -26,8 +26,11 @@ function useAuth(
     try {
       const response = await fetchUser();
       if (response.ok) {
-        const result = await response.json();
-        login(result.nickname);
+          const result = await response.json();
+          login(result.nickname);
+          console.log('--response---', result);
+
+        console.log('--- current auth ---', auth.authenticated);
       } else {
         logout();
       }

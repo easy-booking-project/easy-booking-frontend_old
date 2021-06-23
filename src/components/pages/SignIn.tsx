@@ -2,6 +2,7 @@ import { Flex, Box, Heading, FormControl, FormLabel, Input, Button, CircularProg
 import React, { FormEvent, useState } from 'react';
 import { callApiAndReturnIfSucceed, signIn } from '../../utils/api_handlers';
 import digestText from '../../utils/digest';
+import Auth, { AuthState } from '../../utils/store';
 import { UserSignInInfo } from '../../utils/User';
 
 const inputDefinitions = [
@@ -17,6 +18,9 @@ const inputDefinitions = [
 ];
 
 const SignIn: React.FC = () => {
+  console.log('123');
+  const useAuth = Auth.useContainer();
+
   const [user] = useState<Partial<UserSignInInfo>>({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -34,7 +38,7 @@ const SignIn: React.FC = () => {
         <Box my={4} textAlign="left">
           {/* TODO show the error message  */}
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any*/}
-          <Box as="form" onSubmit={(event: any) => handleSubmit({ event, user, setIsLoading })}>
+          <Box as="form" onSubmit={(event: any) => handleSubmit({ event, user, setIsLoading, useAuth })}>
             {inputDefinitions.map((inputDefinition) => (
               <FormControl key={inputDefinition.name} isRequired={inputDefinition.required}>
                 <FormLabel>{inputDefinition.label}</FormLabel>
@@ -81,16 +85,25 @@ async function handleSubmit({
   event,
   user,
   setIsLoading,
+  useAuth,
 }: {
   event: FormEvent;
   user: Partial<UserSignInInfo>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  useAuth: AuthState;
 }) {
   event.preventDefault();
   setIsLoading(true);
   const isSuccessful = await callApiAndReturnIfSucceed(signIn, user);
   setIsLoading(false);
   if (isSuccessful) {
+    useAuth.login();
+
+    await setTimeout(() => {
+      console.log('123');
+    }, 5000);
+    console.log(useAuth.auth.authenticated);
+
     // TODO consider using useHistory hook
     window.location.reload();
   } else {

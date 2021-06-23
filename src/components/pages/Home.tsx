@@ -9,10 +9,10 @@ const Home = () => {
 
   console.log(useAuth.auth.authenticated);
 
-//   if (!User) {
-//     window.location.hash = '/';
-//     return <CircularProgress isIndeterminate />;
-//   }
+  if (!useAuth.auth.authenticated) {
+    window.location.hash = '/';
+    return <CircularProgress isIndeterminate />;
+  }
 
 //   const { nickname } = User;
 
