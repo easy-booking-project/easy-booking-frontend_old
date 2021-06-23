@@ -18,7 +18,6 @@ const inputDefinitions = [
 ];
 
 const SignIn: React.FC = () => {
-  console.log('123');
   const useAuth = Auth.useContainer();
 
   const [user] = useState<Partial<UserSignInInfo>>({});
@@ -97,12 +96,7 @@ async function handleSubmit({
   const isSuccessful = await callApiAndReturnIfSucceed(signIn, user);
   setIsLoading(false);
   if (isSuccessful) {
-    useAuth.login();
-
-    await setTimeout(() => {
-      console.log('123');
-    }, 5000);
-    console.log(useAuth.auth.authenticated);
+    useAuth.login(user.username ?? '');
 
     // TODO consider using useHistory hook
     window.location.reload();
