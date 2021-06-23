@@ -9,8 +9,8 @@ interface Auth {
 
 export type AuthState = {
   auth: Auth;
-  validate: () => Promise<boolean>;
-  login: () => void;
+  validate: () => Promise<Auth>;
+  login: (username: string) => void;
   logout: () => void;
 };
 
@@ -22,23 +22,33 @@ function useAuth(
 ) {
   const [auth, setAuth] = useState(initialState);
 
-  const validate = async (): Promise<boolean> => {
+  const validate = async (): Promise<Auth> => {
     try {
       const response = await fetchUser();
       if (response.ok) {
-          const result = await response.json();
-          login(result.nickname);
-          console.log('--response---', result);
+        const result = await response.json();
+        login(result.nickname);
+        console.log('--response---', result);
 
         console.log('--- current auth ---', auth.authenticated);
-      } else {
-        logout();
+
+        setAuth({
+          username: result.nickname,
+          authenticated: true,
+        });
+
+        return {
+          username: result.nickname,
+          authenticated: true,
+        } as Auth;
       }
+
+      logout();
     } catch (e) {
       logout();
     }
 
-    return auth.authenticated;
+    return auth;
   };
 
   const login = (username: string) =>
