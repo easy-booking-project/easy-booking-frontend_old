@@ -1,16 +1,17 @@
 import { Box, Button, CircularProgress } from '@chakra-ui/react';
 import React from 'react';
 import { signOut } from '../../utils/api_handlers';
-import { User } from '../../utils/User';
+import Auth from '../../utils/store';
 
-// eslint-disable-next-line no-shadow
-const Home = ({ User }: { User: User }) => {
-  if (!User) {
+const Home = () => {
+  const useAuth = Auth.useContainer();
+
+  if (!useAuth.auth.authenticated) {
     window.location.hash = '/';
     return <CircularProgress isIndeterminate />;
   }
 
-  const { nickname } = User;
+  const nickname = useAuth.auth.username;
 
   return (
     <Box>
