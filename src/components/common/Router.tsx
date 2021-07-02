@@ -43,7 +43,9 @@ const BasicRoute = () => {
         <Route exact path="/signin">
           {user ? <Redirect to="/Home" /> : <SignInLazy />}
         </Route>
-        <Route exact path="/signup" component={SignUpLazy} />
+        <Route exact path="/signup">
+          {user ? <Redirect to="/Home" /> : <SignUpLazy />}
+        </Route>
       </Switch>
     </Suspense>
   );
