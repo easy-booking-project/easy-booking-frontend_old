@@ -1,25 +1,35 @@
-import React, { FormEvent, useEffect, useState } from 'react';
-import { Box, Button, CircularProgress, Flex, FormControl, FormLabel, Heading, Input } from "@chakra-ui/react";
+import React, { FormEvent, useState } from 'react';
+import { Box, Button, CircularProgress, Flex, FormControl, FormLabel, Heading, Input } from '@chakra-ui/react';
 import { UserSignUpInfo } from '../../utils/User';
-import { callApiAndReturnIfSucceed, fetchUser, signUp } from '../../utils/api_handlers';
+import { callApiAndReturnIfSucceed, signUp } from '../../utils/api_handlers';
 import digestText from '../../utils/digest';
 
 const inputDefinitions = [
-  { name: 'username', label: 'Username', type: 'text', placeholder: 'yourname@example.com', size: 'lg', required: true },
+  {
+    name: 'username',
+    label: 'Username',
+    type: 'text',
+    placeholder: 'yourname@example.com',
+    size: 'lg',
+    required: true,
+  },
   { name: 'password', label: 'Password', type: 'password', placeholder: '********', size: 'lg', required: true },
   { name: 'nickname', label: 'Nickname', type: 'text', placeholder: 'Your nickname', size: 'lg', required: true },
   { name: 'firstName', label: 'First Name', type: 'text', placeholder: 'Your first name', size: 'lg', required: false },
-  { name: 'middleName', label: 'Middle Name', type: 'text', placeholder: 'Your middle name', size: 'lg', required: false },
+  {
+    name: 'middleName',
+    label: 'Middle Name',
+    type: 'text',
+    placeholder: 'Your middle name',
+    size: 'lg',
+    required: false,
+  },
   { name: 'lastName', label: 'Last Name', type: 'text', placeholder: 'Your last name', size: 'lg', required: false },
 ];
 
 const SignUp: React.FC = () => {
   const [user] = useState<Partial<UserSignUpInfo>>({});
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    redirectToHomeIfUserAlreadySignedIn();
-  }, []);
 
   return (
     <Flex
@@ -36,18 +46,18 @@ const SignUp: React.FC = () => {
           {/* TODO show the error message  */}
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any*/}
           <Box as="form" onSubmit={(event: any) => handleSubmit({ event, user, setIsLoading })}>
-            {
-              inputDefinitions.map(inputDefinition => (
-                <FormControl key={inputDefinition.name} isRequired={inputDefinition.required}>
-                  <FormLabel>{inputDefinition.label}</FormLabel>
-                  <Input
-                    onChange={event => handleInputChange({ inputName: inputDefinition.name, value: event.currentTarget.value, user })}
-                    // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...inputDefinition}
-                  />
-                </FormControl>
-              ))
-            }
+            {inputDefinitions.map((inputDefinition) => (
+              <FormControl key={inputDefinition.name} isRequired={inputDefinition.required}>
+                <FormLabel>{inputDefinition.label}</FormLabel>
+                <Input
+                  onChange={(event) =>
+                    handleInputChange({ inputName: inputDefinition.name, value: event.currentTarget.value, user })
+                  }
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...inputDefinition}
+                />
+              </FormControl>
+            ))}
             <Button type="submit" variant="outline" width="full" mt={6}>
               {isLoading ? <CircularProgress isIndeterminate size="24px" color="teal" /> : 'Sign Up'}
             </Button>
@@ -60,10 +70,14 @@ const SignUp: React.FC = () => {
 
 export default SignUp;
 
-async function handleInputChange({ inputName, value, user }: {
-  inputName: string,
-  value: string,
-  user: Partial<UserSignUpInfo>,
+async function handleInputChange({
+  inputName,
+  value,
+  user,
+}: {
+  inputName: string;
+  value: string;
+  user: Partial<UserSignUpInfo>;
 }) {
   if (inputName === 'password') {
     // eslint-disable-next-line no-param-reassign
@@ -74,10 +88,14 @@ async function handleInputChange({ inputName, value, user }: {
   }
 }
 
-async function handleSubmit({ event, user, setIsLoading }: {
-  event: FormEvent,
-  user: Partial<UserSignUpInfo>,
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+async function handleSubmit({
+  event,
+  user,
+  setIsLoading,
+}: {
+  event: FormEvent;
+  user: Partial<UserSignUpInfo>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   event.preventDefault();
   setIsLoading(true);
@@ -93,13 +111,5 @@ async function handleSubmit({ event, user, setIsLoading }: {
     // TODO use UI framework's alert component
     // eslint-disable-next-line no-alert
     alert('Sign up fail');
-  }
-}
-
-async function redirectToHomeIfUserAlreadySignedIn() {
-  const hasUserAlreadySignedIn = await callApiAndReturnIfSucceed(fetchUser);
-  if (hasUserAlreadySignedIn) {
-    // TODO consider using useHistory hook
-    window.location.hash = '/';
   }
 }

@@ -1,21 +1,24 @@
-import { Flex, Box, Heading, FormControl, FormLabel, Input, Button, CircularProgress } from "@chakra-ui/react";
-import React, { FormEvent, useEffect, useState } from "react";
-import { callApiAndReturnIfSucceed, fetchUser, signIn } from "../../utils/api_handlers";
-import digestText from "../../utils/digest";
-import { UserSignInInfo } from "../../utils/User";
+import { Flex, Box, Heading, FormControl, FormLabel, Input, Button, CircularProgress } from '@chakra-ui/react';
+import React, { FormEvent, useState } from 'react';
+import { callApiAndReturnIfSucceed, signIn } from '../../utils/api_handlers';
+import digestText from '../../utils/digest';
+import { UserSignInInfo } from '../../utils/User';
 
 const inputDefinitions = [
-  { name: 'username', label: 'Username', type: 'text', placeholder: 'yourname@example.com', size: 'lg', required: true },
+  {
+    name: 'username',
+    label: 'Username',
+    type: 'text',
+    placeholder: 'yourname@example.com',
+    size: 'lg',
+    required: true,
+  },
   { name: 'password', label: 'Password', type: 'password', placeholder: '********', size: 'lg', required: true },
 ];
 
 const SignIn: React.FC = () => {
   const [user] = useState<Partial<UserSignInInfo>>({});
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    redirectToHomeIfUserAlreadySignedIn();
-  }, []);
 
   return (
     <Flex
@@ -32,18 +35,18 @@ const SignIn: React.FC = () => {
           {/* TODO show the error message  */}
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any*/}
           <Box as="form" onSubmit={(event: any) => handleSubmit({ event, user, setIsLoading })}>
-            {
-              inputDefinitions.map(inputDefinition => (
-                <FormControl key={inputDefinition.name} isRequired={inputDefinition.required}>
-                  <FormLabel>{inputDefinition.label}</FormLabel>
-                  <Input
-                    onChange={event => handleInputChange({ inputName: inputDefinition.name, value: event.currentTarget.value, user })}
-                    // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...inputDefinition}
-                  />
-                </FormControl>
-              ))
-            }
+            {inputDefinitions.map((inputDefinition) => (
+              <FormControl key={inputDefinition.name} isRequired={inputDefinition.required}>
+                <FormLabel>{inputDefinition.label}</FormLabel>
+                <Input
+                  onChange={(event) =>
+                    handleInputChange({ inputName: inputDefinition.name, value: event.currentTarget.value, user })
+                  }
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...inputDefinition}
+                />
+              </FormControl>
+            ))}
             <Button type="submit" variant="outline" width="full" mt={6}>
               {isLoading ? <CircularProgress isIndeterminate size="24px" color="teal" /> : 'Sign In'}
             </Button>
@@ -56,10 +59,14 @@ const SignIn: React.FC = () => {
 
 export default SignIn;
 
-async function handleInputChange({ inputName, value, user }: {
-  inputName: string,
-  value: string,
-  user: Partial<UserSignInInfo>,
+async function handleInputChange({
+  inputName,
+  value,
+  user,
+}: {
+  inputName: string;
+  value: string;
+  user: Partial<UserSignInInfo>;
 }) {
   if (inputName === 'password') {
     // eslint-disable-next-line no-param-reassign
@@ -70,10 +77,14 @@ async function handleInputChange({ inputName, value, user }: {
   }
 }
 
-async function handleSubmit({ event, user, setIsLoading }: {
-  event: FormEvent,
-  user: Partial<UserSignInInfo>,
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+async function handleSubmit({
+  event,
+  user,
+  setIsLoading,
+}: {
+  event: FormEvent;
+  user: Partial<UserSignInInfo>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   event.preventDefault();
   setIsLoading(true);
@@ -81,18 +92,10 @@ async function handleSubmit({ event, user, setIsLoading }: {
   setIsLoading(false);
   if (isSuccessful) {
     // TODO consider using useHistory hook
-    window.location.hash = '/';
+    window.location.reload();
   } else {
     // TODO use UI framework's alert component
     // eslint-disable-next-line no-alert
     alert('Sign in fail');
-  }
-}
-
-async function redirectToHomeIfUserAlreadySignedIn() {
-  const hasUserAlreadySignedIn = await callApiAndReturnIfSucceed(fetchUser);
-  if (hasUserAlreadySignedIn) {
-    // TODO consider using useHistory hook
-    window.location.hash = '/';
   }
 }
