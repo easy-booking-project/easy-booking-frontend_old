@@ -1,12 +1,16 @@
 import { Box, Button, CircularProgress } from '@chakra-ui/react';
+import { History } from 'history';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { signOut } from '../../utils/api_handlers';
 import { User } from '../../utils/User';
 
 // eslint-disable-next-line no-shadow
 const Home = ({ User }: { User: User }) => {
+  const history = useHistory();
+
   if (!User) {
-    window.location.hash = '/';
+    history.push('/');
     return <CircularProgress isIndeterminate />;
   }
 
@@ -16,15 +20,15 @@ const Home = ({ User }: { User: User }) => {
     <Box>
       Hello, {nickname}!
       <br />
-      <Button onClick={handleSignOut}>Sign Out</Button>
+      <Button onClick={() => handleSignOut(history)}>Sign Out</Button>
     </Box>
   );
 };
 
 export default Home;
 
-async function handleSignOut() {
+async function handleSignOut(history: History) {
   await signOut();
-  // TODO consider using useHistory hook
-  window.location.reload();
+
+  history.go(0);
 }
