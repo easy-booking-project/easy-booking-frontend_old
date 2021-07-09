@@ -1,5 +1,7 @@
 import { Flex, Box, Heading, FormControl, FormLabel, Input, Button, CircularProgress } from '@chakra-ui/react';
 import React, { FormEvent, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { History } from 'history';
 import { callApiAndReturnIfSucceed, signIn } from '../../utils/api_handlers';
 import digestText from '../../utils/digest';
 import { UserSignInInfo } from '../../utils/User';
@@ -17,6 +19,8 @@ const inputDefinitions = [
 ];
 
 const SignIn: React.FC = () => {
+  const history = useHistory();
+
   const [user] = useState<Partial<UserSignInInfo>>({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -34,13 +38,17 @@ const SignIn: React.FC = () => {
         <Box my={4} textAlign="left">
           {/* TODO show the error message  */}
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any*/}
-          <Box as="form" onSubmit={(event: any) => handleSubmit({ event, user, setIsLoading })}>
+          <Box as="form" onSubmit={(event: any) => handleSubmit({ event, user, setIsLoading, history })}>
             {inputDefinitions.map((inputDefinition) => (
               <FormControl key={inputDefinition.name} isRequired={inputDefinition.required}>
                 <FormLabel>{inputDefinition.label}</FormLabel>
                 <Input
                   onChange={(event) =>
-                    handleInputChange({ inputName: inputDefinition.name, value: event.currentTarget.value, user })
+                    handleInputChange({
+                      inputName: inputDefinition.name,
+                      value: event.currentTarget.value,
+                      user,
+                    })
                   }
                   // eslint-disable-next-line react/jsx-props-no-spreading
                   {...inputDefinition}
@@ -81,18 +89,19 @@ async function handleSubmit({
   event,
   user,
   setIsLoading,
+  history,
 }: {
   event: FormEvent;
   user: Partial<UserSignInInfo>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  history: History;
 }) {
   event.preventDefault();
   setIsLoading(true);
   const isSuccessful = await callApiAndReturnIfSucceed(signIn, user);
   setIsLoading(false);
   if (isSuccessful) {
-    // TODO consider using useHistory hook
-    window.location.reload();
+    history.go(0);
   } else {
     // TODO use UI framework's alert component
     // eslint-disable-next-line no-alert
