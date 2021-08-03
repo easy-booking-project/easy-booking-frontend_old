@@ -2,7 +2,7 @@ import { Box, Button } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { fetchUser, signOut } from '../../utils/api_handlers';
 import { User } from '../../utils/User';
-import Calendar from '../common/calendar/calendar';
+import Calendar from '../common/Calendar';
 
 
 const Home: React.FC = () => {
